@@ -13,13 +13,22 @@ const config = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   
   // CORS configuration
-  corsOrigin: process.env.CORS_ORIGIN || 'https://chat-application-r9tn.vercel.app',
+  corsOrigin: process.env.CORS_ORIGIN ? 
+    process.env.CORS_ORIGIN.split(',') : 
+    [
+      'https://chat-application-r9tn.vercel.app',
+      'https://chat-application-seven-vert.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:3001'
+    ],
   
   // Socket.IO configuration
   socketCors: {
-    origin: process.env.CORS_ORIGIN || 'https://chat-application-r9tn.vercel.app/',
+    origin: "*",
     methods: ['GET', 'POST']
   }
 };
 
 module.exports = config;
+
+
