@@ -13,11 +13,11 @@ const config = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   
   // CORS configuration
-  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  corsOrigin: process.env.CORS_ORIGIN || 'https://chat-application-r9tn.vercel.app',
   
   // Socket.IO configuration
   socketCors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN || 'https://chat-application-r9tn.vercel.app/',
     methods: ['GET', 'POST']
   }
 };

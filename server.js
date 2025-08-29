@@ -6,7 +6,6 @@ const PORT = config.port;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${config.nodeEnv}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
 });
 
 // Graceful shutdown
