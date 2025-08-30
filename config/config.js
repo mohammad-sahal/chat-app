@@ -18,7 +18,7 @@ const config = {
     [
       'https://chat-application-r9tn.vercel.app',
       'https://chat-application-seven-vert.vercel.app',
-      'http://localhost:3000',
+      'https://chat-app-3-ch2x.onrender.com',
       'http://localhost:3001'
     ],
   
