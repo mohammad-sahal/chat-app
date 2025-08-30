@@ -2,7 +2,10 @@ const {
   handlePrivateMessage,
   handleGroupMessage,
   handleTyping,
-  handleStopTyping
+  handleStopTyping,
+  handleDeleteMessage,
+  handleMarkAsRead,
+  handleEditMessage
 } = require('./messageHandler');
 
 const {
@@ -10,7 +13,8 @@ const {
   handleAnswerCall,
   handleCallDeclined,
   handleEndCall,
-  handleIceCandidate
+  handleIceCandidate,
+  handleUserDisconnect
 } = require('./callHandler');
 
 const setupSocket = (io) => {
@@ -19,6 +23,7 @@ const setupSocket = (io) => {
 
     // User joins their own room for private messages
     socket.on('join', (userId) => {
+      socket.userId = userId; // Store user ID in socket for call handling
       socket.join(userId);
       console.log(`👤 User ${userId} joined room ${userId}`);
       console.log(`📋 Active rooms for ${socket.id}:`, Array.from(socket.rooms));
@@ -56,6 +61,22 @@ const setupSocket = (io) => {
       handleStopTyping(io, socket, data);
     });
 
+    // Message management
+    socket.on('delete message', (data) => {
+      console.log('🗑️ Delete message received:', data);
+      handleDeleteMessage(io, socket, data);
+    });
+
+    socket.on('mark as read', (data) => {
+      console.log('👁️ Mark as read received:', data);
+      handleMarkAsRead(io, socket, data);
+    });
+
+    socket.on('edit message', (data) => {
+      console.log('✏️ Edit message received:', data);
+      handleEditMessage(io, socket, data);
+    });
+
     // WebRTC call handling
     socket.on('call user', (data) => {
       console.log('📞 Call user event received on server:', data);
@@ -85,8 +106,16 @@ const setupSocket = (io) => {
     // Handle disconnect
     socket.on('disconnect', async () => {
       console.log('🔌 User disconnected:', socket.id);
+      
+      // Handle call cleanup on disconnect
+      handleUserDisconnect(io, socket);
+      
       // TODO: Update user's online status to false
-      // This would require mapping socket.id to user ID
+      if (socket.userId) {
+        console.log(`👋 User ${socket.userId} went offline`);
+        // Broadcast to other users that this user went offline
+        socket.broadcast.emit('user offline', { userId: socket.userId });
+      }
     });
   });
 };

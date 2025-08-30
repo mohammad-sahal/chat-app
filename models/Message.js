@@ -26,6 +26,21 @@ const messageSchema = new mongoose.Schema({
   timestamp: {
     type: Date,
     default: Date.now
+  },
+  readBy: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  delivered: {
+    type: Boolean,
+    default: true
+  },
+  edited: {
+    type: Boolean,
+    default: false
+  },
+  editedAt: {
+    type: Date
   }
 }, {
   timestamps: true
